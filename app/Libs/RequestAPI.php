@@ -3,18 +3,17 @@
 namespace App\Libs;
 use GuzzleHttp\Client;
 use App\Exceptions\AppException;
+use App\Libs\Config;
 /**
  * 
  */
 class RequestAPI 
 {
-	const SERVER_DOMAIN = 'http://localhost:1001';
-
 	public static function register($method, $uri, $options = []){
-		$client = new Client(['base_uri' => self::SERVER_DOMAIN, 'timeout' => 20.0]);
+		$client = new Client(['base_uri' => Config::SERVER_DOMAIN, 'timeout' => 20.0]);
 		$rs = $client->request($method, $uri, $options);
 		if($rs->getStatusCode() != 200){
-			dd(1);
+			throw new AppException(AppException::ERR_SYSTEM);			
 		}
 		$body = json_decode($rs->getBody()->getContents());
 		return $body;
@@ -22,7 +21,7 @@ class RequestAPI
 
 	public static function request($method, $uri, $options = []){
 
-		$client = new Client(['base_uri' => self::SERVER_DOMAIN, 'timeout' => 20.0]);
+		$client = new Client(['base_uri' => Config::SERVER_DOMAIN, 'timeout' => 20.0]);
 		
 		$rs = $client->request($method, $uri, $options);
 		if($rs->getStatusCode() != 200){

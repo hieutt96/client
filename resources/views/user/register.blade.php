@@ -37,11 +37,9 @@
 				<p>You have an Account? <a href="{{route('user.get.login')}}"> Login Now!</a></p>
 			</div>
 		</div>
-		<!-- copyright -->
 		<div class="colorlibcopy-agile">
-			<p>© 2018</p>
+			<p>© 2019</p>
 		</div>
 	</div>
-	<!-- //main -->
 </body>
 </html>
