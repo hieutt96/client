@@ -12,6 +12,7 @@ class AppException extends Exception
 	const ERR_NONE = 0;
 	const ERR_ACCOUNT_NOT_FOUND = 1;
 	const ERR_SYSTEM = 3;
+    const INVALID_TOKEN = 4;
 
     protected $code;
     protected $message;
@@ -34,13 +35,14 @@ class AppException extends Exception
 
     public function render(Request $request) {
 
-    	$json = [
-
-    		'code' => $this->code,
-    		'message' => $this->message,
-    		'data' => 'null',
-    	];
-
-    	return new JsonResponse($json);
+    	if($this->code == self::INVALID_TOKEN){
+            $access_token = $request->cookie('access_token');
+            if(!empty($access_token)){
+                return redirect()->route('user.get.login', ['return_url'=>base64_encode($request->getRequestUri())])->with('error', $this->message);
+            }
+            else
+                return redirect()->route('user.get.login', ['return_url'=>base64_encode($request->getRequestUri())]);
+        }
+        return redirect()->back()->with('error', $this->message)->withInput();
     }
 }

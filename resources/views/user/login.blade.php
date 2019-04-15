@@ -4,8 +4,8 @@
 	<div class="login-page">
 	  <div class="form">
 	    <form class="login-form">
-	    	<input type="text" placeholder="email address"/>
-	        <input type="password" placeholder="password"/>
+	    	<input type="text" placeholder="email address" name="email" />
+	        <input type="password" placeholder="password" name="password" />
 	        <button>Login</button>
 	        <p class="message">Already registered? <a href="{{route('user.get.register')}}">Sign In</a></p>
 	    </form>

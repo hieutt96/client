@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Cookie;
+use App\Libs\RequestAPI;
+use App\Exceptions\AppException;
 
 class User extends Authenticatable
 {
@@ -27,4 +30,21 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static function getUserInfo() {
+
+        if(Cookie::get('access_token')) {
+            $accessToken = Cookie::get('access_token');
+            $rs = RequestAPI::request('GET', '/api/user/detail', [
+                'headers' => ['Authorization ' => 'Bearer '. $accessToken],
+            ]);
+            if($rs->code != AppException::ERR_NONE) {
+                throw new AppException(AppException::ERR_SYSTEM);
+                
+            }
+            $user = $rs->data;
+            return $user;
+        }
+        return;
+    }
 }

@@ -8,6 +8,7 @@ use App\Libs\RequestAPI;
 use Carbon\Carbon;
 use Cookie;
 use Validator;
+use App\Exceptions\AppException;
 
 class UserController extends Controller
 {
@@ -15,11 +16,19 @@ class UserController extends Controller
 	const SERVER_DOMAIN = 'http://localhost:1001';
 
     public function getLogin(Request $request){
-        // if($request->cookie('access_token')) {
-        //     Cookie::queue(
-        //         Cookie::forget('access_token')
-        //     );
-        // }
+        if($request->cookie('access_token')) {
+            $accessToken = $request->cookie('access_token');
+
+            $rs = RequestAPI::request('GET', '/api/user/detail', [
+                'headers' => ['Authorization' => 'Bearer '.$accessToken],
+            ]);
+            if($rs->code != AppException::ERR_NONE) {
+                throw new AppException(AppException::ERR_SYSTEM);
+                
+            }
+            $user = $rs->data;
+            return redirect()->route('home')->with(['user' => $user]);
+        }
     	return view('user.login');
     }
 
@@ -30,11 +39,17 @@ class UserController extends Controller
             'email' => $email,
             'password' => $password,
         ];
+
         // dd($form_params);
         $rs = RequestAPI::request('POST', '/api/user/login', ['form_params' => $form_params]);
         // dd($rs);
-        // dd(3);
-        return response()->view('user.login')->withCookie(cookie('access_token', $rs->access_token, 10));
+        if($rs->code != AppException::ERR_NONE) {
+            throw new AppException(AppException::ERR_SYSTEM);
+            
+        }
+        $user = $rs->data;
+        Cookie::queue('access_token', $rs->data->access_token, 10);
+        return redirect()->route('home')->with(['user' => $user]);
     }
 
     public function getRegister(Request $request){
