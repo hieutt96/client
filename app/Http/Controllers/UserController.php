@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Cookie;
 use Validator;
 use App\Exceptions\AppException;
+use Session;
 
 class UserController extends Controller
 {
@@ -40,9 +41,8 @@ class UserController extends Controller
             'password' => $password,
         ];
 
-        // dd($form_params);
         $rs = RequestAPI::request('POST', '/api/user/login', ['form_params' => $form_params]);
-        // dd($rs);
+        
         if($rs->code != AppException::ERR_NONE) {
             throw new AppException(AppException::ERR_SYSTEM);
             
@@ -58,14 +58,17 @@ class UserController extends Controller
 
     public function postRegister(Request $request){
 
-        $request->validate([
-            'username' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|same:confirm_password',
-        ],[
-            'username.required' => 'Bạn chưa nhập tên.',
-            'password.same' => '2 mật khẩu không khớp nhau',
-        ]);
+        // $request->validate([
+        //     'username' => 'required',
+        //     'email' => 'required|email',
+        //     'password' => 'required|same:confirm_password',
+        // ],[
+        //     'username.required' => 'Bạn chưa nhập tên.',
+        //     'email.required' => 'Bạn chưa nhập email',
+        //     'email.email' => 'Email không đúng định dạng',
+        //     'password.required' => 'Bạn chưa nhập mật khẩu',
+        //     'password.same' => '2 mật khẩu không khớp nhau',
+        // ]);
     	$form_params = [
     		'name' => $request->username,
     		'email' => $request->email,
@@ -73,7 +76,12 @@ class UserController extends Controller
     	];
         
         $rs = RequestAPI::request('POST', '/api/user/register', ['form_params' => $form_params]);
-        dd($rs);
+        if($rs->code = AppException::ERR_NONE) {
+            throw new AppException(AppException::ERR_SYSTEM);
+            
+        }
+        Session::flash('success', 'Bạn đã đăng ký thành công. Đăng nhập để tiếp tục.');
+        return redirect()->route('user.get.login');
     }
 
     public function getListUser(Request $request) {

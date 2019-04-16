@@ -46,7 +46,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        
-        return redirect()->back()->with('error', $this->message)->withInput();
+        $classException =last(explode('\\', get_class($exception)));
+        if(in_array($classException, ['ValidationException'])) {
+            return redirect()->back()->withInput()->with('errorValidator', $exception->validator->getMessageBag());
+        }
+        return parent::render($request, $exception);
     }
 }
