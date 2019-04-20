@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 
@@ -17,7 +18,7 @@ class AppException extends Exception
     protected $code;
     protected $message;
 
-    public function __construct($code , $message = null, $data = []) {
+    public function __construct($code , $message = "", $data = []) {
 
     	if(!$code) {
     		$code = Response::HTTP_NOT_FOUND;
@@ -30,7 +31,7 @@ class AppException extends Exception
     	$this->code = $code;
     	$this->message = $message;
 
-    	parent::__construct($code, $message);
+    	parent::__construct($message, $code);
     }
 
     public function render(Request $request) {

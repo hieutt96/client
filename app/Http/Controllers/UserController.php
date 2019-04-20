@@ -14,8 +14,6 @@ use Session;
 class UserController extends Controller
 {
 
-	const SERVER_DOMAIN = 'http://localhost:1001';
-
     public function getLogin(Request $request){
         if($request->cookie('access_token')) {
             $accessToken = $request->cookie('access_token');
@@ -58,17 +56,17 @@ class UserController extends Controller
 
     public function postRegister(Request $request){
 
-        // $request->validate([
-        //     'username' => 'required',
-        //     'email' => 'required|email',
-        //     'password' => 'required|same:confirm_password',
-        // ],[
-        //     'username.required' => 'Bạn chưa nhập tên.',
-        //     'email.required' => 'Bạn chưa nhập email',
-        //     'email.email' => 'Email không đúng định dạng',
-        //     'password.required' => 'Bạn chưa nhập mật khẩu',
-        //     'password.same' => '2 mật khẩu không khớp nhau',
-        // ]);
+        $request->validate([
+            'username' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|same:confirm_password',
+        ],[
+            'username.required' => 'Bạn chưa nhập tên.',
+            'email.required' => 'Bạn chưa nhập email',
+            'email.email' => 'Email không đúng định dạng',
+            'password.required' => 'Bạn chưa nhập mật khẩu',
+            'password.same' => '2 mật khẩu không khớp nhau',
+        ]);
     	$form_params = [
     		'name' => $request->username,
     		'email' => $request->email,
@@ -90,5 +88,10 @@ class UserController extends Controller
         // dd($access_token);
         $response = RequestAPI::request('GET', '/api/user/list', ['headers' => ['Authorization' => 'Bearer '.$access_token]]);
         dd($response);
+    }
+
+    public function logout(Request $request) {
+        Cookie::queue(Cookie::forget('access_token'));
+        return redirect()->route('user.get.login');
     }
 }

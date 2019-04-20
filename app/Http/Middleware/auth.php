@@ -22,10 +22,8 @@ class auth
         }else {
             return redirect()->route('user.get.login');
         }
-        // dd($access_token);
 
-        $response = RequestAPI::request('GET', '/api/user/detail', ['headers' => ['Authorization' => 'Bearer '.$access_token]]);
-        dd($response); 
+        $response = RequestAPI::request('GET', '/api/user/detail', ['headers' => ['Authorization' => 'Bearer '.$access_token]]); 
         if($response) {
             return $next($request);
         }       
