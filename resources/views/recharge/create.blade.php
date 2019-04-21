@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title')
-	<title>Home</title>
+	<title>Recharge</title>
 @endsection
 @section('content')
-	{{Widget::run('alert')}}
+
 @endsection

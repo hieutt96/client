@@ -25,4 +25,6 @@ Route::get('/users', 'UserController@getListUser')->middleware('auth');
 
 Route::post('/user/logout', 'UserController@logout')->name('user.logout');
 
-Route::get('/recharge', 'RechargeController@getRecharge');
+Route::get('/active', 'UserController@active')->name('user.active');
+
+Route::get('/recharge', 'RechargeController@getRecharge')->name('user.recharge')->middleware('auth');

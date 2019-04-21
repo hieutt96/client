@@ -14,6 +14,7 @@ use Session;
 class UserController extends Controller
 {
 
+    const TOKEN_EXPIRED = 30;
     public function getLogin(Request $request){
         if($request->cookie('access_token')) {
             $accessToken = $request->cookie('access_token');
@@ -46,7 +47,7 @@ class UserController extends Controller
             
         }
         $user = $rs->data;
-        Cookie::queue('access_token', $rs->data->access_token, 10);
+        Cookie::queue('access_token', $rs->data->access_token, self::TOKEN_EXPIRED);
         return redirect()->route('home')->with(['user' => $user]);
     }
 
@@ -78,7 +79,7 @@ class UserController extends Controller
             throw new AppException(AppException::ERR_SYSTEM);
             
         }
-        Session::flash('success', 'Bạn đã đăng ký thành công. Đăng nhập để tiếp tục.');
+        Session::flash('success', 'Bạn đã đăng ký thành công. Check Email to Active . Please!');
         return redirect()->route('user.get.login');
     }
 
@@ -93,5 +94,19 @@ class UserController extends Controller
     public function logout(Request $request) {
         Cookie::queue(Cookie::forget('access_token'));
         return redirect()->route('user.get.login');
+    }
+
+    public function active(Request $request) {
+        $user = json_decode(base64_decode($request->user));
+        
+        $response = RequestAPI::request('POST', '/api/user/active', [
+            'form_params' => [
+                'user_id' => $user->id,
+            ],
+        ]);
+        $user = $response->data;
+        Cookie::queue('access_token', $response->data->access_token, self::TOKEN_EXPIRED);
+        Session::flash('success', 'Bạn đã kích hoạt tài khoản thành công. Tiếp tục sử dụng các dịch vụ của chúng tôi !');
+        return redirect()->route('home')->with(['user' => $user]);
     }
 }

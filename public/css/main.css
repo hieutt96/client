@@ -128,3 +128,42 @@ button[type="submit"] {
     font-size: 15px;
     cursor: pointer;
 }
+
+.dropdown-menu {
+    float: none;
+    top: 100%;
+    z-index: 1000;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+    text-align: left;
+    background-color: #fff;
+    border-radius: 0.25rem;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+
+.dropdown-item:hover {
+    color: #16181b;
+    text-decoration: none;
+    background-color: #f8f9fa;
+}

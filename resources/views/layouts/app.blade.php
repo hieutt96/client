@@ -21,6 +21,9 @@
     		margin-top: -20px;
     		width: 70px;
     	}
+        .navbar.navbar-default {
+            padding: 10px;
+        }
     </style>
     <body>
     	<nav class="navbar navbar-default">	
@@ -31,13 +34,16 @@
     			<ul class="nav navbar-nav">
     				<li><a href="#">Chuyển tiền</a></li>
     				<li class="dropdown">
-    					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Nạp tiền
-				        <span class="caret"></span></a>
-				        <ul class="dropdown-menu">
-				          <li><a href="#">MOMO</a></li>
-				          <li><a href="#">VNPAY</a></li>
-				        </ul>
+    					<a href="{{route('user.recharge')}}">Nạp tiền</a>
     				</li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Rút tiền
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          <li><a href="#">MOMO</a></li>
+                          <li><a href="#">VNPAY</a></li>
+                        </ul>
+                    </li>
     			</ul>
     			<ul class="nav navbar-nav navbar-right">
     				@if(isset($user))

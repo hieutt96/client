@@ -39,10 +39,10 @@ class AppException extends Exception
     	if($this->code == self::INVALID_TOKEN){
             $access_token = $request->cookie('access_token');
             if(!empty($access_token)){
-                return redirect()->route('user.get.login', ['return_url'=>base64_encode($request->getRequestUri())])->with('error', $this->message);
+                return redirect()->route('user.get.login')->with('error', $this->message);
             }
             else
-                return redirect()->route('user.get.login', ['return_url'=>base64_encode($request->getRequestUri())]);
+                return redirect()->route('user.get.login');
         }
         return redirect()->back()->with('error', $this->message)->withInput();
     }

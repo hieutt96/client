@@ -14,7 +14,7 @@
 					{{ Widget::run('alert') }}
 				</div>
 				<form action="{{route('user.post.register')}}" method="post">
-					@csrf
+					{{csrf_field()}}
 					<div class="col-md-12">
 						<input id="username" class="" type="text" name="username" placeholder="Username" value="{{ old('username') }}" autocomplete="off" >
 					</div>
