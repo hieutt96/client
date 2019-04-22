@@ -25,7 +25,6 @@ class RechargeController extends Controller
     		
     	}
     	$amounts = $rs->data;
-
     	$response = RequestAPI::requestSetting('GET', '/api/recharge-type/list', [
     		'query' => ['jwt' => $jwt],
     	]);
