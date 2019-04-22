@@ -28,3 +28,5 @@ Route::post('/user/logout', 'UserController@logout')->name('user.logout');
 Route::get('/active', 'UserController@active')->name('user.active');
 
 Route::get('/recharge', 'RechargeController@getRecharge')->name('user.recharge')->middleware('auth');
+
+Route::post('/recharge', 'RechargeController@postRecharge')->name('user.post.recharge')->middleware('auth');

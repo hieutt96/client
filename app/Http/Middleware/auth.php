@@ -28,6 +28,6 @@ class auth
             view()->share('user', $response->data);
             return $next($request);
         }       
-        return redirect()->route('user.get.login');
+        return redirect()->route('user.get.login')->with('error', 'Hết phiên đăng nhập');
     }
 }
