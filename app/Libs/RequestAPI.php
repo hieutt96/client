@@ -50,6 +50,7 @@ class RequestAPI
 		$client = new Client(['base_uri' =>Config::LEDGER_DOMAIN, 'timeout' => 20.0]);
 		
 		$rs = $client->request($method, $uri, $options);
+
 		if($rs->getStatusCode() != 200){
 			throw new AppExcetion(AppExcetion::ERR_SYSTEM);
 		}

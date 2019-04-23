@@ -30,3 +30,6 @@ Route::get('/active', 'UserController@active')->name('user.active');
 Route::get('/recharge', 'RechargeController@getRecharge')->name('user.recharge')->middleware('auth');
 
 Route::post('/recharge', 'RechargeController@postRecharge')->name('user.post.recharge')->middleware('auth');
+
+Route::get('/recharge/url_return', 'RechargeController@responseData');
+Route::get('/recharge/url_notify', 'RechargeController@responseDataMoMo');
