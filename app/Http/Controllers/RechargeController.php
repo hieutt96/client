@@ -102,15 +102,16 @@ class RechargeController extends Controller
     	$data = $request->all();
     	
     	$rechargeId = Redis::get('recharge_id_user_id_'.$request->user->id);
-
+        // dd($rechargeId);
     	if(!$rechargeId) {
     		return redirect()->route('user.recharge');
     	}
-    	// Redis::del('recharge_id_user_id_'.$request->user->id);
+    	Redis::del('recharge_id_user_id_'.$request->user->id);
 
     	$data['recharge_id'] = $rechargeId;
     	// dd(Cookie::get('access_token'));
-    	dd($data);
+    	// dd($data);
+        $accessToken = Cookie::get('access_token');
   		$response = RequestAPI::requestLedger('POST', '/api/recharge/complete', [
     		'headers' => ['Authorization'=> 'Bearer '.$accessToken],
     		'form_params' => $data,
