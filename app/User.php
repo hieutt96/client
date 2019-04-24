@@ -36,7 +36,7 @@ class User extends Authenticatable
         if(Cookie::get('access_token')) {
             $accessToken = Cookie::get('access_token');
             $rs = RequestAPI::request('GET', '/api/user/detail', [
-                'headers' => ['Authorization ' => 'Bearer '. $accessToken],
+                'headers' => ['Authorization' => 'Bearer '. $accessToken],
             ]);
             if($rs->code != AppException::ERR_NONE) {
                 throw new AppException(AppException::ERR_SYSTEM);

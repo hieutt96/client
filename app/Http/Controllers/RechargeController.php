@@ -9,6 +9,8 @@ use App\Exceptions\AppException;
 use Cookie;
 use App\Libs\Config;
 use Session;
+use Illuminate\Support\Facades\Redis;
+use App\User;
 
 class RechargeController extends Controller
 {
@@ -68,7 +70,13 @@ class RechargeController extends Controller
     		throw new AppException(AppException::ERR_SYSTEM);
     		
     	}
-    	$request->session()->put('recharge_id', $response->data->recharge_id);
+    	// dd($response->data->recharge_id);
+    	$redis = Redis::connection();
+    	// dd($redis->getConnection()->getParameters()->port);
+    	// dd($request->user);
+    	$redis->set('recharge_id_user_id_'.$request->user->id, $response->data->recharge_id);
+    	// dd($redis->get('recharge_id_user_id_'.$request->user->id));
+
     	if($request->recharge_type_id == Config::VNPAY_TYPE) {
     		header('Location: '.$response->data->vpn_url_checkout.$response->data->vnp_url);
 	        die();
@@ -90,9 +98,28 @@ class RechargeController extends Controller
         //https://developers.momo.vn/#thong-tin-testing-ung-dung-momo
     }
 
-    public function responseData(Request $request) {
+    public function responseDataVnp(Request $request) {
+    	$data = $request->all();
+    	
+    	$rechargeId = Redis::get('recharge_id_user_id_'.$request->user->id);
 
-    	dd(1);
+    	if(!$rechargeId) {
+    		return redirect()->route('user.recharge');
+    	}
+    	// Redis::del('recharge_id_user_id_'.$request->user->id);
+
+    	$data['recharge_id'] = $rechargeId;
+    	// dd(Cookie::get('access_token'));
+    	dd($data);
+  		$response = RequestAPI::requestLedger('POST', '/api/recharge/complete', [
+    		'headers' => ['Authorization'=> 'Bearer '.$accessToken],
+    		'form_params' => $data,
+    	]);
+    	dd($response);
+    	if($response->code != AppException::ERR_NONE) {
+    		throw new AppException(AppException::ERR_SYSTEM);
+    		
+    	}
     }
 
     public function responseDataMoMo(Request $request) {

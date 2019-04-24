@@ -31,5 +31,5 @@ Route::get('/recharge', 'RechargeController@getRecharge')->name('user.recharge')
 
 Route::post('/recharge', 'RechargeController@postRecharge')->name('user.post.recharge')->middleware('auth');
 
-Route::get('/recharge/url_return', 'RechargeController@responseData');
+Route::get('/recharge/url_return', 'RechargeController@responseDataVnp')->middleware('auth');
 Route::get('/recharge/url_notify', 'RechargeController@responseDataMoMo');

@@ -20,7 +20,7 @@
 					@csrf
 					{{ csrf_field() }}
 				   	<div class="form-group">
-				        <input id="email" type="text" required="true" name="email" autocomplete="off" value=""  readonly="" onfocus="this.removeAttribute('readonly');"/>
+				        <input id="email" type="text" value="{{old('email')}}" required="true" name="email" autocomplete="off" value=""  readonly="" onfocus="this.removeAttribute('readonly');"/>
 						<label for="email" alt="Nhập Email" placeholder="Nhập Email"></label>
 				        
 				    </div>

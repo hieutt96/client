@@ -15,6 +15,7 @@ class UserController extends Controller
 {
 
     const TOKEN_EXPIRED = 30;
+    
     public function getLogin(Request $request){
         if($request->cookie('access_token')) {
             $accessToken = $request->cookie('access_token');

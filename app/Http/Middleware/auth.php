@@ -25,6 +25,7 @@ class auth
 
         $response = RequestAPI::request('GET', '/api/user/detail', ['headers' => ['Authorization' => 'Bearer '.$access_token]]); 
         if($response) {
+            $request->user = $response->data;
             view()->share('user', $response->data);
             return $next($request);
         }       
