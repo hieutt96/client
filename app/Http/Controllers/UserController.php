@@ -23,6 +23,7 @@ class UserController extends Controller
             $rs = RequestAPI::request('GET', '/api/user/detail', [
                 'headers' => ['Authorization' => 'Bearer '.$accessToken],
             ]);
+
             if($rs->code != AppException::ERR_NONE) {
                 throw new AppException(AppException::ERR_SYSTEM);
                 

@@ -27,9 +27,19 @@ Route::post('/user/logout', 'UserController@logout')->name('user.logout');
 
 Route::get('/active', 'UserController@active')->name('user.active');
 
-Route::get('/recharge', 'RechargeController@getRecharge')->name('user.recharge')->middleware('auth');
+Route::group(['prefix' => 'recharge', 'middleware' => 'auth'], function(){
 
-Route::post('/recharge', 'RechargeController@postRecharge')->name('user.post.recharge')->middleware('auth');
+	Route::get('/', 'RechargeController@getRecharge')->name('user.recharge');
 
-Route::get('/recharge/url_return', 'RechargeController@responseDataVnp')->middleware('auth');
-Route::get('/recharge/url_notify', 'RechargeController@responseDataMoMo');
+	Route::post('/', 'RechargeController@postRecharge')->name('user.post.recharge');
+
+	Route::get('/url_return_vnpay', 'RechargeController@responseDataVnp');
+
+	Route::get('/url_return_momo', 'RechargeController@responseDataMoMo');
+	
+	Route::get('/url_notify', 'RechargeController@responseDataMoMo');
+
+	Route::get('/success', 'RechargeController@success')->name('recharge.success');
+
+	Route::get('/fail', 'RechargeController@fail')->name('recharge.fail');
+});

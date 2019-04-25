@@ -34,3 +34,15 @@
         @endif
     </div>
 @endif
+@if(session('warning'))
+    <div class="alert alert-warning">
+        <button class="close" data-dismiss="alert">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        @if(is_array(json_decode(Session::get('warning'), true)))
+            {!! implode('', Session::get('warning')->all(':message<br/>')) !!}
+        @else
+            {!! Session::get('warning') !!}
+        @endif
+    </div>
+@endif
