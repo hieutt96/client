@@ -33,7 +33,7 @@
     				<a href="{{route('home')}}" class="navbar-brand"><img src="{{asset('/image/default/mywallet.jpg')}}" id="logo_home"></a>
     			</div>
     			<ul class="nav navbar-nav">
-    				<li><a href="#">Chuyển tiền</a></li>
+    				<li><a href="{{route('transfer.create')}}">Chuyển tiền</a></li>
     				<li class="dropdown">
     					<a href="{{route('user.recharge')}}">Nạp tiền</a>
     				</li>

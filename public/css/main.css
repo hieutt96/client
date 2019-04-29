@@ -167,3 +167,8 @@ button[type="submit"] {
     text-decoration: none;
     background-color: #f8f9fa;
 }
+
+.btn:hover {
+
+    color: white !important;
+}

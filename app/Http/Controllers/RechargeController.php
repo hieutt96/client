@@ -112,7 +112,7 @@ class RechargeController extends Controller
 
     public function responseDataVnp(Request $request) {
     	$data = $request->all();
-    	
+
     	$rechargeId = Redis::get('recharge_id_user_id_'.$request->user->id);
         // dd($rechargeId);
     	if(!$rechargeId) {

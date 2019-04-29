@@ -43,3 +43,14 @@ Route::group(['prefix' => 'recharge', 'middleware' => 'auth'], function(){
 
 	Route::get('/fail', 'RechargeController@fail')->name('recharge.fail');
 });
+
+Route::group(['prefix' => 'transfer', 'middleware' => 'auth'], function(){
+
+	Route::get('create', 'TransferController@create')->name('transfer.create');
+
+	Route::post('create', 'TransferController@postCreate')->name('transfer.post.create');
+
+	Route::get('verify', 'TransferController@verify')->name('transfer.verify');
+
+	Route::post('verify', 'TransferController@postVerify')->name('transfer.post.verify');
+});

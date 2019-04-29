@@ -39,6 +39,7 @@ class RequestAPI
 					$msg .= $message;
 				}
 			}
+			
 			throw new AppException($body->code, $msg);
 			
 		}

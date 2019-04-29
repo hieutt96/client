@@ -10,6 +10,7 @@ use Cookie;
 use Validator;
 use App\Exceptions\AppException;
 use Session;
+use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
@@ -17,7 +18,16 @@ class UserController extends Controller
     const TOKEN_EXPIRED = 30;
     
     public function getLogin(Request $request){
+        if(Redis::get('error_login')) {
+
+            Redis::del('error_login');
+
+            Session::flash('error', 'Hết phiên đăng nhập');
+            
+            return view('user.login');
+        }
         if($request->cookie('access_token')) {
+
             $accessToken = $request->cookie('access_token');
 
             $rs = RequestAPI::request('GET', '/api/user/detail', [
