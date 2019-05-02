@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Libs\RequestAPI;
 use App\Exceptions\AppException;
 use Cookie;
+use Session;
 
 class TransferController extends Controller
 {
@@ -80,7 +81,7 @@ class TransferController extends Controller
         ]);
         $dataTransfer = $request->session()->get('data_transfer');
         $accessToken = Cookie::get('access_token');
-        dd($accessToken);
+        
         $rs = RequestAPI::requestLedger('POST', '/api/transfer/create', [
             'headers' => ['Authorization' => 'Bearer '.$accessToken],
             'form_params' => [
@@ -94,6 +95,20 @@ class TransferController extends Controller
             throw new AppException(AppException::ERR_SYSTEM);
             
         }
-        dd($rs);
+        $request->session()->forget('data_transfer');
+        $request->session()->put('data_transfer_result', $rs->data);
+        return redirect()->route('transfer.success');
+    }
+
+    public function success(Request $request) {
+
+        if(!$request->session()->has('data_transfer_result')) {
+            return redirect()->route('transfer.create');
+        }
+
+        $dataTransfer = $request->session()->get('data_transfer_result');
+        $request->session()->forget('data_transfer_result');
+        Session::flash('success', 'Chuyển tiền thành công');
+        return view('transfer.success', compact('dataTransfer'));
     }
 }

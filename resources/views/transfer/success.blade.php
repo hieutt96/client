@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-	<title>Xác nhận chuyển tiền</title>
+	<title>Chuyển tiền thành công</title>
 	<style type="text/css">
 
 		tr {
@@ -33,6 +33,11 @@
 			margin-left: 50px;
 		}
 
+		button{
+
+			height: 50px;
+		}
+
 	</style>
 @endsection
 @section('content')
@@ -44,34 +49,32 @@
 			<table class="">
 				<tr>
 					<td>Chuyển đến </td>
-					<td>{{$dataTransfer['email']}}</td>
+					<td>{{$dataTransfer->email}}</td>
 				</tr>
 				<tr>
 					<td>Số tiền</td>
-					<td><?= number_format($dataTransfer['amount'], 0, ',', '.') ?></td>
+					<td><?= number_format($dataTransfer->amount, 0, ',', '.') ?></td>
 				</tr>
 				<tr>
 					<td>
 						Phí giao dịch
 					</td>
 					<td>
-						<?= number_format($dataTransfer['fee'], 0, ',', '.') ?>
+						<?= number_format($dataTransfer->fee, 0, ',', '.') ?>
 					</td>
 				</tr>
 				<tr>
 					<td>Nội dung</td>
-					<td>{{$dataTransfer['description']}}</td>
+					<td>{{$dataTransfer->description}}</td>
 				</tr>
 			</table>
-			<div class="col-md-12">
-				<form method="POST" action="{{route('transfer.post.verify')}}">
-					{{csrf_field()}}
-					<div class="form-group">
-						<input type="password" name="password" value="" autocomplete="off" id="password" required="true">
-						<label for="password" alt="Nhập Password" placeholder="Nhập Password"></label>
-					</div>
-					<button type="submit" style="margin-top: 100px;">Xác nhận giao dịch</button>
-				</form>
+			<div class="col-md-12" style="margin-top: 100px;">
+				<div class="col-md-6">
+					<a href="{{route('home')}}"><button class="btn btn-default form-control">Về trang chủ</button></a>
+				</div>
+				<div class="col-md-6">
+					<a href="{{route('transfer.create')}}"><button class="btn btn-success form-control">Giao dịch mới</button></a>
+				</div>
 			</div>
 		</center>
 	</div>

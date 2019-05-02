@@ -11,6 +11,7 @@ use App\Libs\Config;
 use Session;
 use Illuminate\Support\Facades\Redis;
 use App\User;
+use Log;
 
 class RechargeController extends Controller
 {
@@ -134,7 +135,7 @@ class RechargeController extends Controller
     		throw new AppException(AppException::ERR_SYSTEM);
     		
     	}
-
+        $request->session()->put('recharge_id', $rechargeId);
     	if($response->data->code = '00') {
     		return redirect()->route('recharge.success');
 
@@ -146,36 +147,50 @@ class RechargeController extends Controller
     public function responseDataMoMo(Request $request) {
 
     	$data = $request->all();
-    	
-    	$rechargeId = Redis::get('recharge_id_user_id_'.$request->user->id);
+        Log::info(json_encode($data));
+        $rechargeId = Redis::get('recharge_id_user_id_'.$request->user->id);
         // dd($rechargeId);
-    	if(!$rechargeId) {
-    		return redirect()->route('user.recharge');
-    	}
-
-    	$data['recharge_id'] = $rechargeId;
-    	// dd(Cookie::get('access_token'));
-        if($data['errorCode'] != '0') {
-            return redirect()->route('recharge.fail');
+        if(!$rechargeId) {
+            return redirect()->route('transfer.create');
         }
 
+        $data['recharge_id'] = $rechargeId;
+        // dd(Cookie::get('access_token'));
+        
         $accessToken = Cookie::get('access_token');
-  		$response = RequestAPI::requestLedger('POST', '/api/recharge/complete', [
-    		'headers' => ['Authorization'=> 'Bearer '.$accessToken],
-    		'form_params' => $data,
-    	]);
+        $response = RequestAPI::requestLedger('POST', '/api/recharge/complete', [
+            'headers' => ['Authorization'=> 'Bearer '.$accessToken],
+            'form_params' => $data,
+        ]);
+        $request->session()->forget('recharge_id');
 
-    	if($response->code != AppException::ERR_NONE) {
-    		throw new AppException(AppException::ERR_SYSTEM);
-    		
-    	}
+        if($response->data->code == '00') {
+            return redirect()->route('recharge.success');
 
-    	if($response->data->code = '00') {
-    		return redirect()->route('recharge.success');
+        }else {
+            return redirect()->route('recharge.fail');
+        }
+    }
 
-    	}else {
-    		return redirect()->route('recharge.fail');
-    	}
+    public function responseDataMoMoNotify(Request $request) {
+
+        $data = $request->all();
+        Log::info(json_encode($data));
+        $rechargeId = $request->session()->get('recharge_id');
+        // dd($rechargeId);
+        if(!$rechargeId) {
+            return ;
+        }
+
+        $data['recharge_id'] = $rechargeId;
+        // dd(Cookie::get('access_token'));
+
+        $accessToken = Cookie::get('access_token');
+        $response = RequestAPI::requestLedger('POST', '/api/recharge/complete', [
+            'headers' => ['Authorization'=> 'Bearer '.$accessToken],
+            'form_params' => $data,
+        ]);
+        $request->session()->forget('recharge_id');
     }
 
     public function success(Request $request) {
@@ -196,7 +211,7 @@ class RechargeController extends Controller
     		Redis::del('recharge_id_user_id_'.$request->user->id);
 
     		Session::flash('error', 'Nạp tiền thất bại');
-    		return view('recharge.success');
+    		return view('recharge.fail');
     	}else {
 
     		return redirect()->route('user.recharge');

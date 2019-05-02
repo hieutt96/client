@@ -36,13 +36,13 @@ Route::group(['prefix' => 'recharge', 'middleware' => 'auth'], function(){
 	Route::get('/url_return_vnpay', 'RechargeController@responseDataVnp');
 
 	Route::get('/url_return_momo', 'RechargeController@responseDataMoMo');
-	
-	Route::get('/url_notify', 'RechargeController@responseDataMoMo');
 
 	Route::get('/success', 'RechargeController@success')->name('recharge.success');
 
 	Route::get('/fail', 'RechargeController@fail')->name('recharge.fail');
 });
+
+Route::post('/recharge/url_notify', 'RechargeController@responseDataMoMoNotify');
 
 Route::group(['prefix' => 'transfer', 'middleware' => 'auth'], function(){
 
@@ -53,4 +53,19 @@ Route::group(['prefix' => 'transfer', 'middleware' => 'auth'], function(){
 	Route::get('verify', 'TransferController@verify')->name('transfer.verify');
 
 	Route::post('verify', 'TransferController@postVerify')->name('transfer.post.verify');
+
+	Route::get('/success', 'TransferController@success')->name('transfer.success');
+});
+
+Route::group(['prefix' => 'withdrawal', 'middleware' => 'auth'], function(){
+
+	Route::get('create', 'WithdrawalController@create')->name('withdrawal.create');
+
+	Route::post('create', 'WithdrawalController@postCreate')->name('user.post.withdrawal');
+
+	Route::get('/url_return_vnpay', 'WithdrawalController@responseDataVnp');
+
+	Route::get('/success', 'WithdrawalController@success')->name('withdrawal.success');
+
+	Route::get('/fail', 'WithdrawalController@fail')->name('withdrawal.fail');
 });
