@@ -6,3 +6,5 @@ Tài liệu/api store : https://developer.truemoney.com.vn/ban-tien-truc-tiep-ph
 https://datago.vn/site/api-doc#data-code
 
 https://alego.vn/default/index
+
+https://github.com/thienhaxanh2405/alego-api-wrapper
