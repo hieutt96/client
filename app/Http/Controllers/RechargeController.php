@@ -21,6 +21,7 @@ class RechargeController extends Controller
     public function getRecharge(Request $request) {
    		
     	$jwt = RequestJWT::encodeJWT();
+        dd($jwt);
     	$rs = RequestAPI::requestSetting('GET', '/api/recharge-type-amount/list', [
     		'query' => ['jwt' => $jwt],
     	]);

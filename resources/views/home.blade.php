@@ -4,4 +4,7 @@
 @endsection
 @section('content')
 	{{Widget::run('alert')}}
+    <div class="container">
+        {{ Widget::run('vat') }}
+    </div>
 @endsection

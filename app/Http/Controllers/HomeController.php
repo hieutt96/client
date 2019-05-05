@@ -6,10 +6,18 @@ use Illuminate\Http\Request;
 use Cookie;
 use App\Libs\RequestAPI;
 use App\Exceptions\AppException;
+use App\Libs\RequestJWT;
+use Illuminate\Support\Facades\View;
 
 class HomeController extends Controller
 {
+
+    public function __construct() {
+        
+    }
+
     public function home(Request $request) {
+
     	if($request->user) {
     		$user = $request->user;
     		return view('home', compact('user'));

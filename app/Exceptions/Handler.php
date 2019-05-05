@@ -50,6 +50,9 @@ class Handler extends ExceptionHandler
         if(in_array($classException, ['ValidationException'])) {
             return redirect()->back()->withInput()->with('errorValidator', $exception->validator->getMessageBag());
         }
+        if(in_array($classException, ['ConnectException'])) {
+            return redirect()->route('home');
+        }
         return parent::render($request, $exception);
     }
 }

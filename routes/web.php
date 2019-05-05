@@ -69,3 +69,10 @@ Route::group(['prefix' => 'withdrawal', 'middleware' => 'auth'], function(){
 
 	Route::get('/fail', 'WithdrawalController@fail')->name('withdrawal.fail');
 });
+
+Route::group(['prefix' => 'store'], function() {
+
+	Route::get('/service/{services_id}', 'ServiceController@listItem')->name('service.item');
+
+	Route::post('/buy/service', 'ServiceController@postBuyItem')->name('service.buy.item');
+});
