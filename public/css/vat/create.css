@@ -3,6 +3,13 @@
     height: 150px
 }
 
+.item {
+
+    border: 1px solid #d6d9dc;
+    border-radius: 15px;
+    padding: 10px;
+}
+
 .item-active {
     border-radius: 15px;
     padding: 10px;
@@ -12,13 +19,6 @@
 .method {
     margin-top: 20px;
     margin-bottom: 20px;
-}
-
-.item {
-
-    border: 1px solid #d6d9dc;
-    border-radius: 15px;
-    padding: 10px;
 }
 
 .amount {
@@ -49,6 +49,7 @@
   transition: all 0.3 ease;
   cursor: pointer;
   margin-top: 60px;
+  margin-bottom: 60px;
 }
 .form button:hover,.form button:active,.form button:focus {
   background: #43A047;

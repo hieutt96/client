@@ -75,4 +75,6 @@ Route::group(['prefix' => 'store'], function() {
 	Route::get('/service/{services_id}', 'ServiceController@listItem')->name('service.item');
 
 	Route::post('/buy/service', 'ServiceController@postBuyItem')->name('service.buy.item');
+
+	Route::get('/service/item/list-amount', 'ServiceController@listAmount')->name('service.item.list-amount');
 });

@@ -29,6 +29,31 @@ class ServiceController extends Controller
     		
     	}
     	$serviceItems = $serviceItems->data;
-    	return view('services.create', compact('serviceItems'));
+    	return view('services.create', compact('serviceItems', 'services_id'));
+    }
+
+    public function listAmount(Request $request) {
+
+        $itemId = $request->item_id;
+        if($itemId) {
+
+            $jwt = RequestJWT::encodeJWT();
+            $rs = RequestAPI::requestStore('GET', '/api/service-items/list-amount', [
+                'query' => [
+                    'jwt' => $jwt,
+                    'item_id' => $itemId,
+                ],
+            ]);
+            if($rs->code != 0) {
+                return ;
+            }
+            return $rs->data;
+        }
+        return ;
+    }
+
+    public function postBuyItem(Request $request) {
+
+        dd([$request->all(), RequestJWT::encodeJWT()]);
     }
 }
