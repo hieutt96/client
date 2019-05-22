@@ -31,6 +31,7 @@ class HomeController extends Controller
                 
             }
     		$user = $rs->data;
+            // dd($user);
     		return view('home', compact('user'));
     	}
     	return view('home');
