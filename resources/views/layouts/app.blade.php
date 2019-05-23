@@ -54,7 +54,7 @@
     			<ul class="nav navbar-nav navbar-right">
     				@if(isset($user))
                         <li class="navbar-item">
-                            <a href="#" style="cursor: none;">Số dư : <b><?= number_format($user->balance, 0, ',', '.') .'  VND'?></b></a>
+                            <a href="#" style="cursor: pointer;">Số dư : <b><?= number_format($user->balance, 0, ',', '.') .'  VND'?></b></a>
                         </li>
                         <li class="nav-item">
                             <a href="#"><i class="fa fa-bell-o fa-big"><span class="label label-danger">{{$user->notification_unread}}</span></i></a>
@@ -63,8 +63,10 @@
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ $user->name }} <span class="caret"></span>
                             </a>
-
+                            
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a href="{{route('user.google2FA')}}" class="dropdown-item">Thiết lập mật khẩu 2 lớp</a>
+                                <div class="divider"></div>
                                 <a class="dropdown-item" href="{{route('user.logout')}}"
                                     onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">
@@ -74,6 +76,7 @@
                                 <form id="logout-form" action="{{ route('user.logout') }}" method="POST" style="display: none;">
                                     @csrf
                                 </form>
+                                
                             </div>
                         </li>
                     @else

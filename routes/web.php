@@ -78,3 +78,6 @@ Route::group(['prefix' => 'store'], function() {
 
 	Route::get('/service/item/list-amount', 'ServiceController@listAmount')->name('service.item.list-amount');
 });
+
+Route::get('/user/google-authenticate', 'UserController@google2FAGenerate')->name('user.google2FA')->middleware('auth');
+Route::post('/user/google-authenticate', 'UserController@verifyGoogle2FAGenerate')->name('user.post.google2FA');

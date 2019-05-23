@@ -11,6 +11,7 @@ use Validator;
 use App\Exceptions\AppException;
 use Session;
 use Illuminate\Support\Facades\Redis;
+use Google2FA;
 
 class UserController extends Controller
 {
@@ -120,5 +121,25 @@ class UserController extends Controller
         Cookie::queue('access_token', $response->data->access_token, self::TOKEN_EXPIRED);
         Session::flash('success', 'Bạn đã kích hoạt tài khoản thành công. Tiếp tục sử dụng các dịch vụ của chúng tôi !');
         return redirect()->route('home')->with(['user' => $user]);
+    }
+
+    public function google2FAGenerate(Request $request) {
+
+        $google2fa = app('pragmarx.google2fa');
+        $secretKey = $google2fa->generateSecretKey();
+        $url = 'https://chart.googleapis.com/chart?cht=qr&chs=200x200&choe=UTF-8&chld=M|0&chl=otpauth://totp/Mywallet2FA?secret='.$secretKey;
+        return view('user.security_2fa', compact('url'));
+    }
+
+    public function verifyGoogle2FAGenerate(Request $request) {
+
+        $secret = $request->secret;
+        if(Google2FA::verifyKey('HZOYFNSUZIMZTONA', $secret)) {
+
+            dd('true');
+        }else {
+            dd('false');
+        }
+
     }
 }
