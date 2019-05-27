@@ -72,7 +72,7 @@ class RechargeController extends Controller
 				'url_notify' => $urlNotify,
 	    	];
     	}
-
+        dd([Cookie::get('access_token'),$data]);
     	$response = RequestAPI::requestLedger('POST', '/api/recharge', [
     		'headers' => ['Authorization'=> 'Bearer '.$accessToken],
     		'form_params' => $data,
@@ -81,7 +81,7 @@ class RechargeController extends Controller
     		throw new AppException(AppException::ERR_SYSTEM);
     		
     	}
-    	// dd($response->data->recharge_id);
+    	dd($response->data);
     	$redis = Redis::connection();
     	// dd($redis->getConnection()->getParameters()->port);
     	// dd($request->user);
@@ -95,7 +95,11 @@ class RechargeController extends Controller
     	}elseif($request->recharge_type_id == Config::MOMO_TYPE) {
     		header('location:'. $response->data->pay_url);
             die();
-    	}
+    	}elseif($request->recharge_type_id = Config::ONEPAY_TYPE) {
+
+            header('location:'. $response->data->pay_url);
+            die();
+        }
     	
         // Thông tin thẻ test (Chọn Ngân hàng NCB để thanh toán)
 

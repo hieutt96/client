@@ -11,4 +11,5 @@
 
 		const VNPAY_TYPE = 1;
 		const MOMO_TYPE = 2;
+		const ONEPAY_TYPE = 3;
 	}
