@@ -65,6 +65,8 @@ Route::group(['prefix' => 'withdrawal', 'middleware' => 'auth'], function(){
 
 	Route::get('/url_return_vnpay', 'WithdrawalController@responseDataVnp');
 
+	Route::get('/url_return_momo', 'WithdrawalController@responseDataMoMo');
+
 	Route::get('/success', 'WithdrawalController@success')->name('withdrawal.success');
 
 	Route::get('/fail', 'WithdrawalController@fail')->name('withdrawal.fail');
@@ -81,3 +83,8 @@ Route::group(['prefix' => 'store'], function() {
 
 Route::get('/user/google-authenticate', 'UserController@google2FAGenerate')->name('user.google2FA')->middleware('auth');
 Route::post('/user/google-authenticate', 'UserController@verifyGoogle2FAGenerate')->name('user.post.google2FA');
+
+Route::group(['prefix' => 'txn', 'middleware' => 'auth'], function(){
+
+	Route::get('/txn-list-notification', 'TxnController@listNotification')->name('txn.list.notification');
+});

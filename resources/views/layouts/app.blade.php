@@ -57,7 +57,7 @@
                             <a href="#" style="cursor: pointer;">Số dư : <b><?= number_format($user->balance, 0, ',', '.') .'  VND'?></b></a>
                         </li>
                         <li class="nav-item">
-                            <a href="#"><i class="fa fa-bell-o fa-big"><span class="label label-danger">{{$user->notification_unread}}</span></i></a>
+                            <a href="{{route('txn.list.notification')}}"><i class="fa fa-bell-o fa-big"><span class="label label-danger">{{$user->notification_unread}}</span></i></a>
                         </li>
 						<li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

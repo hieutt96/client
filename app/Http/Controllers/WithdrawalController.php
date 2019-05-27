@@ -10,6 +10,7 @@ use Cookie;
 use Illuminate\Support\Facades\Redis;
 use App\User;
 use Session;
+use Log;
 
 class WithdrawalController extends Controller
 {
@@ -86,7 +87,7 @@ class WithdrawalController extends Controller
 				'url_notify' => $urlNotify,
 	    	];
     	}
-
+        // dd([$data, $accessToken]);
     	$response = RequestAPI::requestLedger('POST', '/api/withdrawal', [
     		'headers' => ['Authorization'=> 'Bearer '.$accessToken],
     		'form_params' => $data,
@@ -95,7 +96,7 @@ class WithdrawalController extends Controller
     		throw new AppException(AppException::ERR_SYSTEM);
     		
     	}
-
+        // dd($response);
     	$redis = Redis::connection();
     	// dd($redis->getConnection()->getParameters()->port);
     	// dd($request->user);
@@ -148,12 +149,67 @@ class WithdrawalController extends Controller
         }
     }
 
+    public function responseDataMoMo(Request $request) {
+
+        $data = $request->all();
+        Log::info(json_encode($data));
+        $withdrawalId = Redis::get('withdrawal_id_user_id_'.$request->user->id);
+        // dd($rechargeId);
+        if(!$withdrawalId) {
+            return redirect()->route('withdrawal.create');
+        }
+
+        $data['withdrawal_id'] = $withdrawalId;
+        // dd(Cookie::get('access_token'));
+        
+        $accessToken = Cookie::get('access_token');
+        $response = RequestAPI::requestLedger('POST', '/api/withdrawal/complete', [
+            'headers' => ['Authorization'=> 'Bearer '.$accessToken],
+            'form_params' => $data,
+        ]);
+
+        if($response->code != AppException::ERR_NONE) {
+
+            throw new AppException(AppException::ERR_SYSTEM);
+            
+        }
+        // dd($response);
+
+        if($response->data->code == '00') {
+            return redirect()->route('withdrawal.success');
+
+        }else {
+            return redirect()->route('withdrawal.fail');
+        }
+    }
+
+    public function responseDataMoMoNotify(Request $request) {
+
+        $data = $request->all();
+        Log::info(json_encode($data));
+        $rechargeId = $request->session()->get('recharge_id');
+        // dd($rechargeId);
+        if(!$rechargeId) {
+            return ;
+        }
+
+        $data['recharge_id'] = $rechargeId;
+        // dd(Cookie::get('access_token'));
+
+        $accessToken = Cookie::get('access_token');
+        $response = RequestAPI::requestLedger('POST', '/api/recharge/complete', [
+            'headers' => ['Authorization'=> 'Bearer '.$accessToken],
+            'form_params' => $data,
+        ]);
+        $request->session()->forget('recharge_id');
+    }
+
     public function success(Request $request) {
 
         if(Redis::get('withdrawal_id_user_id_'.$request->user->id)) {
             Redis::del('withdrawal_id_user_id_'.$request->user->id);
 
-            Session::flash('success', 'Nạp tiền thành công');
+            Session::flash('success', 'Rút tiền thành công');
             return view('withdrawal.success');
         }else {
             return redirect()->route('withdrawal.create');
@@ -165,7 +221,7 @@ class WithdrawalController extends Controller
         if(Redis::get('withdrawal_id_user_id_'.$request->user->id)) {
             Redis::del('withdrawal_id_user_id_'.$request->user->id);
 
-            Session::flash('error', 'Nạp tiền thất bại');
+            Session::flash('error', 'Rút tiền thất bại');
             return view('withdrawal.fail');
         }else {
 

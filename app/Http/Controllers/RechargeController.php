@@ -151,7 +151,7 @@ class RechargeController extends Controller
         $rechargeId = Redis::get('recharge_id_user_id_'.$request->user->id);
         // dd($rechargeId);
         if(!$rechargeId) {
-            return redirect()->route('transfer.create');
+            return redirect()->route('user.recharge');
         }
 
         $data['recharge_id'] = $rechargeId;
