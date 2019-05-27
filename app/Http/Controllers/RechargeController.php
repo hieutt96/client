@@ -72,7 +72,17 @@ class RechargeController extends Controller
 				'url_notify' => $urlNotify,
 	    	];
     	}
-        dd([Cookie::get('access_token'),$data]);
+        if($request->recharge_type_id == Config::ONEPAY_TYPE) {
+            $urlReturn = Config::CLIENT_DOMAIN.'/recharge/url_return_onepay';
+            $urlNotify = Config::CLIENT_DOMAIN.'/recharge/url_notify_onepay';
+            $data = [
+                'amount' => (int) $request->amount,
+                'recharge_type_id' => (int) $request->recharge_type_id,
+                'url_return' => $urlReturn,
+                'url_notify' => $urlNotify,
+            ];
+        }
+        // dd([Cookie::get('access_token'),$data]);
     	$response = RequestAPI::requestLedger('POST', '/api/recharge', [
     		'headers' => ['Authorization'=> 'Bearer '.$accessToken],
     		'form_params' => $data,
@@ -81,7 +91,7 @@ class RechargeController extends Controller
     		throw new AppException(AppException::ERR_SYSTEM);
     		
     	}
-    	dd($response->data);
+    	// dd($response->data);
     	$redis = Redis::connection();
     	// dd($redis->getConnection()->getParameters()->port);
     	// dd($request->user);
@@ -97,7 +107,7 @@ class RechargeController extends Controller
             die();
     	}elseif($request->recharge_type_id = Config::ONEPAY_TYPE) {
 
-            header('location:'. $response->data->pay_url);
+            header('location:'. $response->data->vpc_url_checkout.$response->data->pay_url);
             die();
         }
     	
