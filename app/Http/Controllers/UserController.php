@@ -180,6 +180,7 @@ class UserController extends Controller
         $accessToken = Cookie::get('access_token');
         $response = RequestAPI::request('POST', '/user/create-google2fa-secret',[
             'headers' => [ 'Authorization' => 'Bearer '.$accessToken],
-        ])
+        ]);
+        dd(1);
     }
 }
