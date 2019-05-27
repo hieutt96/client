@@ -65,7 +65,7 @@
                             </a>
                             
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a href="{{route('user.google2FA')}}" class="dropdown-item">Thiết lập mật khẩu 2 lớp</a>
+                                <a href="{{route('user.google2FA')}}" class="dropdown-item">Profile</a>
                                 <div class="divider"></div>
                                 <a class="dropdown-item" href="{{route('user.logout')}}"
                                     onclick="event.preventDefault();

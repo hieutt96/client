@@ -18,6 +18,7 @@ class AppException extends Exception
     const USER_NOT_EXISTS = 7;
     const ACCOUNT_NOT_ACTIVE = 9;
     const ERR_ENOUGH_BALANCE = 10;
+    const ERR_PHONE_INVAILD = 11;
 
     protected $code;
     protected $message;

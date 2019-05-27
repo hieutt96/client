@@ -5,7 +5,7 @@ input[type="text"] {
     margin: 0 0 1em;
     padding: 6px;
     padding-left: 12px;
-    border: 0.5px solid #bababa;
+    border: 1px solid #bababa;
     border-radius: 3px;
     background: #fff;
     font-size: 16px;
@@ -66,7 +66,7 @@ input[type="password"] {
     margin: 0 0 1em;
     padding: 6px;
     padding-left: 12px;
-    border: 0.5px solid #bababa;
+    border: 1px solid #bababa;
     border-radius: 3px;
     background: #fff;
     font-size: 16px;
@@ -128,6 +128,17 @@ button[type="submit"] {
     font-size: 15px;
     cursor: pointer;
 }
+
+button[type="button"] {
+    border: 0px;
+    color: #fff;
+    background-color: #c62147;
+    padding: 17px;
+    width: 100% !important;
+    font-size: 15px;
+    cursor: pointer;
+}
+
 
 .dropdown-menu {
     float: none;

@@ -79,5 +79,11 @@ Route::group(['prefix' => 'store'], function() {
 	Route::get('/service/item/list-amount', 'ServiceController@listAmount')->name('service.item.list-amount');
 });
 
-Route::get('/user/google-authenticate', 'UserController@google2FAGenerate')->name('user.google2FA')->middleware('auth');
-Route::post('/user/google-authenticate', 'UserController@verifyGoogle2FAGenerate')->name('user.post.google2FA');
+
+Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
+
+	Route::get('/google-authenticate', 'UserController@google2FAGenerate')->name('user.google2FA');
+	Route::get('/edit', 'UserController@edit')->name('user.edit');
+	Route::post('/edit', 'UserController@postEdit')->name('user.post.edit');
+	Route::get('/secury-on', 'UserController@securyOn')->name('user.secury.on');
+});

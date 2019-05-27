@@ -12,6 +12,7 @@ use App\Exceptions\AppException;
 use Session;
 use Illuminate\Support\Facades\Redis;
 use Google2FA;
+use App\Helpers\MyHelpers;
 
 class UserController extends Controller
 {
@@ -125,21 +126,60 @@ class UserController extends Controller
 
     public function google2FAGenerate(Request $request) {
 
-        $google2fa = app('pragmarx.google2fa');
-        $secretKey = $google2fa->generateSecretKey();
-        $url = 'https://chart.googleapis.com/chart?cht=qr&chs=200x200&choe=UTF-8&chld=M|0&chl=otpauth://totp/Mywallet2FA?secret='.$secretKey;
-        return view('user.security_2fa', compact('url'));
+        $accessToken = Cookie::get('access_token');
+
+        $response = RequestAPI::request('GET', '/api/user/detail-google2fa',[
+            'headers' => ['Authorization' => 'Bearer '.$accessToken],
+        ]);
+        $data = $response->data;
+        return view('user.detail', compact('data'));
     }
 
-    public function verifyGoogle2FAGenerate(Request $request) {
+    public function edit(Request $request) {
 
-        $secret = $request->secret;
-        if(Google2FA::verifyKey('HZOYFNSUZIMZTONA', $secret)) {
+        return view('user.edit');
+    }
 
-            dd('true');
-        }else {
-            dd('false');
+    public function postEdit(Request $request) {
+
+        $request->validate([
+            'address' => 'required',
+            'phone' => 'required',
+            'social_id' => 'required',
+        ],[
+            'address.required' => 'Bạn chưa nhập địa chỉ',
+            'phone.required' => 'Bạn chưa nhập số điện thoại',
+            'social_id.required' => 'Bạn chưa nhập CMND/căn cước',
+        ]);
+
+        if(!MyHelpers::isValidPhoneNumber($request->phone)) {
+
+            throw new AppException(AppException::ERR_PHONE_INVAILD);
+            
+        }
+        $accessToken = Cookie::get('access_token');
+        $response = RequestAPI::request('POST', '/api/user/edit', [
+            'headers' => [ 'Authorization' => 'Bearer '.$accessToken ],
+            'form_params' => [
+                'address' => $request->address,
+                'phone' => $request->phone,
+                'social_id' => $request->social_id,
+            ],
+        ]);
+        if($response->code != AppException::ERR_NONE) {
+
+            throw new AppException(AppException::ERR_SYSTEM);
+            
         }
 
+        return redirect()->route('user.google2FA');
+    }
+
+    public function securyOn(Request $request) {
+
+        $accessToken = Cookie::get('access_token');
+        $response = RequestAPI::request('POST', '/user/create-google2fa-secret',[
+            'headers' => [ 'Authorization' => 'Bearer '.$accessToken],
+        ])
     }
 }
