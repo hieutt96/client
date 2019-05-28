@@ -31,13 +31,11 @@
 				</tr>
 				<tr>
 					<td>Mã Google Authenticate</td>
-					<td>
-						@if(isset($data->secret))
-							<td>{{$data->secret}}</td>
-						@else
-							<td></td>
-						@endif
-					</td>
+					@if(isset($data->secret))
+						<td>{{$data->secret}}</td>
+					@else
+						<td></td>
+					@endif
 				</tr>
 				<tr>
 					<td>Thời gian lập tài khoản</td>
@@ -58,9 +56,9 @@
 		<div class="col-md-12">
 			<div class="col-md-6">
 				@if($data->status == '00') 
-					<a href="{{route('user.secury.on')}}"><button type="button">Bật bảo mật 2 lớp</button></a>
+					<a href="{{route('user.secury.on.verify')}}"><button type="button">Bật bảo mật 2 lớp</button></a>
 				@else 
-					<a href="#"><button type="button">Tắt bảo mật 2 lớp</button></a>
+					<a href="{{route('user.secury.off.verify')}}"><button type="button">Tắt bảo mật 2 lớp</button></a>
 				@endif
 			</div>
 			<div class="col-md-6">

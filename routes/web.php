@@ -17,6 +17,10 @@ Route::get('/login', 'UserController@getLogin')->name('user.get.login');
 
 Route::post('/login', 'UserController@postLogin')->name('user.post.login');
 
+Route::get('/get-verify-code', 'VerifyController@getVerifyCode')->name('user.get.verify.code');
+
+Route::post('/verify-login', 'VerifyController@verifyLogin')->name('user.verify_login');
+
 Route::get('/register', 'UserController@getRegister')->name('user.get.register');
 
 Route::post('/register', 'UserController@postRegister')->name('user.post.register');
@@ -88,9 +92,16 @@ Route::group(['prefix' => 'store'], function() {
 Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
 
 	Route::get('/google-authenticate', 'UserController@google2FAGenerate')->name('user.google2FA');
+
 	Route::get('/edit', 'UserController@edit')->name('user.edit');
+
 	Route::post('/edit', 'UserController@postEdit')->name('user.post.edit');
-	Route::get('/secury-on', 'UserController@securyOn')->name('user.secury.on');
+
+	Route::get('/secury-on-verify', 'UserController@securyOn')->name('user.secury.on.verify');
+	
+	Route::post('/secury-on-verify', 'UserController@postSecuryOn')->name('user.secury.on.post.verify');
+	Route::get('/secury-off-verify', 'UserController@securyVerifyOff')->name('user.secury.off.verify');
+	Route::post('/secury-off-verify', 'UserController@postSecuryVerifyOff')->name('user.secury.off.post.verify');
 });
 
 Route::group(['prefix' => 'txn', 'middleware' => 'auth'], function(){

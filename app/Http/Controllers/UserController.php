@@ -60,6 +60,22 @@ class UserController extends Controller
             throw new AppException(AppException::ERR_SYSTEM);
             
         }
+
+        $response = RequestAPI::request('GET', '/api/user/detail-google2fa', [
+
+            'headers' => ['Authorization' => 'Bearer '.$rs->data->access_token],
+        ]);
+        if($response->code != AppException::ERR_NONE) {
+            throw new AppException(AppException::ERR_SYSTEM);
+            
+        }
+
+        if($response->data->status == '01') {
+            $redis = Redis::connection();
+            $redis->set('access_token', $rs->data->access_token);
+            return redirect()->route('user.get.verify.code');
+        }
+
         $user = $rs->data;
         Cookie::queue('access_token', $rs->data->access_token, self::TOKEN_EXPIRED);
         return redirect()->route('home')->with(['user' => $user]);
@@ -177,10 +193,59 @@ class UserController extends Controller
 
     public function securyOn(Request $request) {
 
-        $accessToken = Cookie::get('access_token');
-        $response = RequestAPI::request('POST', '/user/create-google2fa-secret',[
-            'headers' => [ 'Authorization' => 'Bearer '.$accessToken],
+        return view('security.verify');
+    }
+
+    public function postSecuryOn(Request $request) {
+
+        $request->validate([
+            'password' => 'required',
+        ],[
+            'password.required' => 'Bạn chưa điền mật khẩu',
         ]);
-        dd(1);
+
+        $accessToken = Cookie::get('access_token');
+        $response = RequestAPI::request('POST', '/api/user/create-google2fa-secret',[
+            'headers' => [ 'Authorization' => 'Bearer '.$accessToken],
+            'form_params' => [
+                'password' => $request->password,
+            ],
+        ]);
+        if($response->code != AppException::ERR_NONE) {
+            throw new AppException(AppException::ERR_SYSTEM);
+            
+        }
+        $data = $response->data;
+        Session::flash('success', 'Bật bảo mật bước 2 thành công');
+        return view('security.complete', compact('data'));
+    }
+
+    public function securyVerifyOff(Request $request) {
+
+        return view('security.verify_off');
+    }
+
+    public function postSecuryVerifyOff(Request $request) {
+
+        $request->validate([
+            'password' => 'required',
+        ],[
+            'password.required' => 'Bạn chưa điền mật khẩu',
+        ]);
+
+        $accessToken = Cookie::get('access_token');
+        $response = RequestAPI::request('POST', '/api/user/off-google2fa',[
+            'headers' => [ 'Authorization' => 'Bearer '.$accessToken],
+            'form_params' => [
+                'password' => $request->password,
+            ],
+        ]);
+
+        if($response->code != AppException::ERR_NONE) {
+            throw new AppException(AppException::ERR_SYSTEM);
+            
+        }
+        Session::flash('success', 'Tắt bảo mật 2 lớp thành công');
+        return redirect()->route('user.google2FA');
     }
 }
