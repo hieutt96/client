@@ -17,7 +17,7 @@ class HomeController extends Controller
     }
 
     public function home(Request $request) {
-
+        // dd(Cookie::get('access_token'));
     	if($request->user) {
     		$user = $request->user;
     		return view('home', compact('user'));

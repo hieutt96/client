@@ -18,7 +18,6 @@
             <div class="col-md-12">
 				<form method="POST" action="{{route('user.post.login')}}">
 					@csrf
-					{{ csrf_field() }}
 				   	<div class="form-group">
 				        <input id="email" type="text" value="{{old('email')}}" required="true" name="email" autocomplete="off"  readonly="" onfocus="this.removeAttribute('readonly');"/>
 						<label for="email" alt="Nhập Email" placeholder="Nhập Email"></label>

@@ -107,7 +107,7 @@ class RechargeController extends Controller
             die();
     	}elseif($request->recharge_type_id = Config::ONEPAY_TYPE) {
 
-            header('location:'. $response->data->vpc_url_checkout.$response->data->pay_url);
+            header('Location: '.$response->data->vpc_url_checkout."?".$response->data->pay_url);
             die();
         }
     	

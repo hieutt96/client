@@ -16,6 +16,7 @@
         <script type="text/javascript" src="{{asset('/js/lib/jquery.js')}}"></script>
         <script type="text/javascript" src="{{asset('/js/lib/bootstrap.js')}}"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
     </head>
     @yield('title')
     <style type="text/css">
@@ -79,6 +80,20 @@
                                 
                             </div>
                         </li>
+                        <script type="text/javascript">
+                            var pusher = new Pusher('b37c8c3a8b5a0756ebd9', {
+                                      cluster: 'ap1',
+                                    });
+                            var channel = pusher.subscribe('channel-transfer');
+
+                            channel.bind('mywallet.transfer_'+'{{$user->id}}', function(data){
+                                
+                                $(".notification_pusher").append(`<div class="alert alert-success alert-dismissible">
+                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                        <strong>Thông báo !</strong>`+`Bạn vừa nhận được `+data.amount+` vnd từ tài mã tài khoản `+data.accountFrom.id+`
+                                    </div>`);
+                            });
+                        </script>
                     @else
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('user.get.login') }}">{{ __('Login') }}</a>
@@ -92,6 +107,11 @@
     			</ul>
     		</div>
     	</nav>
+        <section class="">
+            <div class="container notification_pusher" style="padding: 20px;">
+
+            </div>
+        </section>
     	<section>
             <div class="container">
                 @yield('content')

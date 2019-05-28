@@ -40,6 +40,8 @@ Route::group(['prefix' => 'recharge', 'middleware' => 'auth'], function(){
 	Route::get('/success', 'RechargeController@success')->name('recharge.success');
 
 	Route::get('/fail', 'RechargeController@fail')->name('recharge.fail');
+
+	Route::get('/url_return_onepay', 'OnePayController@responseData')->name('onepay.response');
 });
 
 Route::post('/recharge/url_notify', 'RechargeController@responseDataMoMoNotify');
@@ -94,4 +96,6 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
 Route::group(['prefix' => 'txn', 'middleware' => 'auth'], function(){
 
 	Route::get('/txn-list-notification', 'TxnController@listNotification')->name('txn.list.notification');
+
+	Route::get('/txn-detail/{id}', 'TxnController@detail')->name('txn.detail');
 });
