@@ -25,7 +25,7 @@ class RequestAPI
 		
 		$rs = $client->request($method, $uri, $options);
 		if($rs->getStatusCode() != 200){
-			throw new AppExcetion(AppExcetion::ERR_SYSTEM);
+			throw new AppException(AppException::ERR_SYSTEM);
 		}
 		$body = json_decode($rs->getBody()->getContents());
 		
@@ -53,7 +53,7 @@ class RequestAPI
 		$rs = $client->request($method, $uri, $options);
 
 		if($rs->getStatusCode() != 200){
-			throw new AppExcetion(AppExcetion::ERR_SYSTEM);
+			throw new AppException(AppException::ERR_SYSTEM);
 		}
 		$body = json_decode($rs->getBody()->getContents());
 
@@ -78,7 +78,7 @@ class RequestAPI
 		
 		$rs = $client->request($method, $uri, $options);
 		if($rs->getStatusCode() != 200){
-			throw new AppExcetion(AppExcetion::ERR_SYSTEM);
+			throw new AppException(AppException::ERR_SYSTEM);
 		}
 		$body = json_decode($rs->getBody()->getContents());
 
@@ -104,7 +104,7 @@ class RequestAPI
 		
 		$rs = $client->request($method, $uri, $options);
 		if($rs->getStatusCode() != 200){
-			throw new AppExcetion(AppExcetion::ERR_SYSTEM);
+			throw new AppException(AppException::ERR_SYSTEM);
 		}
 		$body = json_decode($rs->getBody()->getContents());
 

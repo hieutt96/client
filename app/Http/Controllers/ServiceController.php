@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Libs\RequestAPI;
 use App\Exceptions\AppException;
 use App\Libs\RequestJWT;
+use Cookie;
+use App\Libs\StoreAPI;
+use Redis;
 
 class ServiceController extends Controller
 {
@@ -54,6 +57,72 @@ class ServiceController extends Controller
 
     public function postBuyItem(Request $request) {
 
-        dd([$request->all(), RequestJWT::encodeJWT()]);
+        $request->validate([
+            'service_id' => 'required',
+            'item_id' => 'required',
+            'quantity' => 'required',
+            'amount' => 'required',
+        ]);
+        $data = [
+            'service_id' => (int) $request->service_id,
+            'item_id' => (int) $request->item_id,
+            'quantity' => (int) $request->quantity,
+            'amount' => (int) $request->amount,
+        ];
+
+        Redis::set('service_data', json_encode($data));
+
+        return redirect()->route('service.verify');
+    }
+
+    public function verifyTransaction() {
+
+        $accessToken = Cookie::get('access_token');
+        
+        if($accessToken) {
+
+            $response = StoreAPI::request('GET', '/api/user/detail',[
+                'headers' => ['Authorization' => 'Bearer '.$accessToken],
+            ]);
+
+            if(isset($response->code) && $response->code == AppException::ERR_NONE) {
+
+                $email = 0;
+                return view('services.verify_transaction', compact('email'));
+            } 
+        }
+        $email = 1;
+        return view('services.verify_transaction', compact('email'));
+    }
+
+    public function postVerifyTransaction(Request $request) {
+
+        $request->validate([
+            'password' => 'required',
+        ],[
+            'password.required' => 'Bạn chưa nhập password',
+        ]);
+        $serviceData = json_decode(Redis::get('service_data'), true);
+        $serviceData['password'] = $request->password;
+        if($request->has('email')) {
+            $serviceData['email'] = $request->email;
+        }else {
+            $serviceData['access_token'] = Cookie::get('access_token');
+        }
+        // Redis::del('service_data');
+        $jwt = RequestJWT::encodeJWT();
+        // dd([$serviceData, $jwt]);
+        $response = StoreAPI::requestStore('POST', '/api/buy/service', [
+            'query' => [
+                'jwt' => $jwt,
+            ],
+            'form_params' => $serviceData,
+        ]);
+        if($response->code != AppException::ERR_NONE) {
+
+            throw new AppException(AppException::ERR_SYSTEM);
+            
+        }
+        dd($response->data);
     }
 }

@@ -78,7 +78,7 @@ Route::group(['prefix' => 'withdrawal', 'middleware' => 'auth'], function(){
 	Route::get('/fail', 'WithdrawalController@fail')->name('withdrawal.fail');
 });
 
-Route::group(['prefix' => 'store'], function() {
+Route::group(['prefix' => 'store', 'middleware' => 'store'], function() {
 
 	Route::get('/service/{services_id}', 'ServiceController@listItem')->name('service.item');
 
@@ -87,6 +87,9 @@ Route::group(['prefix' => 'store'], function() {
 	Route::get('/service/item/list-amount', 'ServiceController@listAmount')->name('service.item.list-amount');
 });
 
+Route::get('/service/verify', 'ServiceController@verifyTransaction')->name('service.verify')->middleware('store');
+
+Route::post('/service/verify', 'ServiceController@postVerifyTransaction')->name('post.service.verify')->middleware('store');
 
 
 Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
