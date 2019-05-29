@@ -8,10 +8,14 @@ use App\Exceptions\AppException;
 use App\Libs\RequestJWT;
 use Cookie;
 use App\Libs\StoreAPI;
-use Redis;
+use Illuminate\Support\Facades\Redis;
+use App\Helpers\MyHelpers;
 
 class ServiceController extends Controller
 {
+    const CARD_GAME = 1;
+    const CARD_MOBILE = 2;
+    const TOPUP_MOBILE = 3;
     public function listItem(Request $request) {
 
     	$services_id = $request->services_id;
@@ -69,7 +73,11 @@ class ServiceController extends Controller
             'quantity' => (int) $request->quantity,
             'amount' => (int) $request->amount,
         ];
-
+        // dd($request->service_id);
+        if($request->service_id == self::TOPUP_MOBILE){
+            Redis::set('service_id', $request->service_id);
+        }
+        
         Redis::set('service_data', json_encode($data));
 
         return redirect()->route('service.verify');
@@ -92,7 +100,14 @@ class ServiceController extends Controller
             } 
         }
         $email = 1;
-        return view('services.verify_transaction', compact('email'));
+        
+        if(Redis::get('service_id')) {
+            $phone = 1;
+        }else {
+            $phone = 0;
+        }
+        
+        return view('services.verify_transaction', compact('email', 'phone'));
     }
 
     public function postVerifyTransaction(Request $request) {
@@ -104,11 +119,20 @@ class ServiceController extends Controller
         ]);
         $serviceData = json_decode(Redis::get('service_data'), true);
         $serviceData['password'] = $request->password;
+
+        if($request->has('phone')) {
+            if(!MyHelpers::isValidPhoneNumber($request->phone)) {
+                throw new AppException(AppException::ERR_PHONE_INVAILD);
+                
+            }
+            $serviceData['phone'] = MyHelpers::pasrePhone($request->phone);
+        }
         if($request->has('email')) {
             $serviceData['email'] = $request->email;
         }else {
             $serviceData['access_token'] = Cookie::get('access_token');
         }
+
         // Redis::del('service_data');
         $jwt = RequestJWT::encodeJWT();
         // dd([$serviceData, $jwt]);
