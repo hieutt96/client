@@ -6,7 +6,7 @@ class MyHelpers {
 
     public static function pasrePhone($phone) {
 
-        return preg_replace("/^(|\+)(0|84)/", "84", $phone);
+        return preg_replace("/^(|\+)(0|84)/", "0", $phone);
     }
     
     public static function isValidPhoneNumber($phone) {

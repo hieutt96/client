@@ -50,7 +50,7 @@
 				</div>
 				<br>
 				<div class="col-md-12 col-xs-12 method" id='quantity'>
-					<input type="number" name="quantity" min="1" value="1">
+					<input type="number" name="quantity" min="1" value="1" readonly="true">
 				</div>
 				<input type="hidden" name="amount" value="">
 				<button class="">Mua thẻ</button>

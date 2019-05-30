@@ -90,6 +90,7 @@ Route::group(['prefix' => 'store', 'middleware' => 'store'], function() {
 Route::get('/service/verify', 'ServiceController@verifyTransaction')->name('service.verify')->middleware('store');
 
 Route::post('/service/verify', 'ServiceController@postVerifyTransaction')->name('post.service.verify')->middleware('store');
+Route::get('/service/success', 'ServiceController@success')->name('service.success')->middleware('store');
 
 
 Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
