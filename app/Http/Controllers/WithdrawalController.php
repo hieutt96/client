@@ -110,7 +110,10 @@ class WithdrawalController extends Controller
     	}elseif($request->withdrawal_type_id == Config::MOMO_TYPE) {
     		header('location:'. $response->data->pay_url);
             die();
-    	}
+    	}else {
+            throw new AppException(AppException::ERR_NOT_SUPPORT);
+            
+        }
     }
 
     public function responseDataVnp(Request $request) {

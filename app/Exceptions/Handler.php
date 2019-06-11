@@ -51,6 +51,8 @@ class Handler extends ExceptionHandler
             return redirect()->back()->withInput()->with('errorValidator', $exception->validator->getMessageBag());
         }
         if(in_array($classException, ['ConnectException', 'FatalErrorException '])) {
+            throw new AppException(AppException::ERR_CONNECT_REDIS);
+            
             dd('Lỗi hệ thống');
         }
         return parent::render($request, $exception);

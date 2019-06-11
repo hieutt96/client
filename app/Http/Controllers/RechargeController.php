@@ -112,17 +112,15 @@ class RechargeController extends Controller
         }
     	
         // Thông tin thẻ test (Chọn Ngân hàng NCB để thanh toán)
-
         // Số thẻ: 9704198526191432198
-
         // Tên chủ thẻ: NGUYEN VAN A
-
         // Ngày phát hành: 07/15
-
         // Mật khẩu OTP mặc định: 123456
 
         //https://developers.momo.vn/#thong-tin-testing-ung-dung-momo
         //phone 0917003000
+        //password 000000
+        //otp 000000
     }
 
     public function responseDataVnp(Request $request) {

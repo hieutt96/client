@@ -114,3 +114,10 @@ Route::group(['prefix' => 'txn', 'middleware' => 'auth'], function(){
 
 	Route::get('/txn-detail/{id}', 'TxnController@detail')->name('txn.detail');
 });
+
+Route::group(['prefix' => 'order'], function(){
+
+	Route::get('/payment', 'PaymentController@payment')->name('order.payment');
+
+	Route::post('/payment', 'PaymentController@postPayment')->name('order.post.payment');	
+});

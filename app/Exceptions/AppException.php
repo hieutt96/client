@@ -19,6 +19,11 @@ class AppException extends Exception
     const ACCOUNT_NOT_ACTIVE = 9;
     const ERR_ENOUGH_BALANCE = 10;
     const ERR_PHONE_INVAILD = 11;
+    const ERR_CONNECT_REDIS = 12;
+    const ERR_NOT_SUPPORT = 13;
+    const ERR_ORDER_NOT_FOUND = 14;
+    const ERR_CHECKSUM_NOT_FOUND = 15;
+    const ERR_CHECKSUM_INVALID = 16;
 
     protected $code;
     protected $message;
